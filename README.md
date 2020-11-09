@@ -7,7 +7,7 @@ Fly plugin originally created for the Spinalcraft Minecraft Server
 
 ## Features
 - Automatic daily fly time reset
-- When not flying time is paused
+- When not flying, time is paused
 - Remaining fly time displayed on action bar
 - Can preset how long a permission rank can fly in minutes
 
