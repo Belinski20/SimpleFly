@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.belinski20</groupId>
-    <artifactId>spinalcraft</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>SimpleFly</artifactId>
+    <version>1.0.1b</version>
     <packaging>jar</packaging>
 
-    <name>SimpleFly</name>
+    <name>SimpleFly-${project.version}</name>
 
     <description>Simple Fly Plugin For SpinalCraft</description>
     <properties>

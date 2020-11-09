@@ -3,7 +3,6 @@ package com.belinski20.simplefly;
 import com.belinski20.simplefly.Command.AddCommand;
 import com.belinski20.simplefly.Command.FlyCommand;
 import com.belinski20.simplefly.Command.ResetCommand;
-import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -116,7 +115,7 @@ public final class SimpleFly extends JavaPlugin{
 
         if(!canReset)
         {
-            if(resetHour > LocalTime.now().getHour() + 1)
+            if(resetHour < LocalTime.now().getHour())
             {
                 canReset = true;
             }
@@ -124,7 +123,7 @@ public final class SimpleFly extends JavaPlugin{
 
         if(canReset)
         {
-            if(resetHour < LocalTime.now().getHour() + 1)
+            if(resetHour == LocalTime.now().getHour())
             {
                 getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
                 fManager.timerReset();
