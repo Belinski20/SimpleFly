@@ -1,0 +1,24 @@
+name: SimpleFly
+version: ${project.version}
+main: com.belinski20.simplefly.SimpleFly
+api-version: 1.16
+authors: [Belinski20]
+description: Simple Fly Plugin For SpinalCraft
+depend: [Vault]
+
+commands:
+  sfly:
+    permission-message: Do not have valid permissions to use
+    description: Enable/Disable Fly
+    permission: simplefly.fly
+    usage: /sfly
+  aft:
+    permission-message: Do not have valid permissions to use
+    description: Adds fly time to a player given a number of minutes
+    usage: /aft <username> <time in minutes>
+    permission: simplefly.aft
+  rft:
+    permission-message: Do not have valid permissions to use
+    description: Sets the daily fly reset time to a given hour
+    usage: /rft <0-24>
+    permission: simplefly.rft
