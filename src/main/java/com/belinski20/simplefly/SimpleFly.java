@@ -14,13 +14,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.Calendar;
 
-public final class SimpleFly extends JavaPlugin{
+public class SimpleFly extends JavaPlugin{
 
     public static SimpleFly s;
     public FlyManager fManager;
     public Permission perms;
     private boolean canReset = false;
+    private int resetHour = 0;
+
 
     @Override
     public void onEnable() {
@@ -32,7 +35,7 @@ public final class SimpleFly extends JavaPlugin{
         getCommand("rft").setExecutor(new ResetCommand());
         getServer().getPluginManager().registerEvents(new FlyEvents(), this);
         setupPermissions();
-
+        setupResetTime();
         try {
             createFile();
         } catch (IOException e) {
@@ -45,11 +48,6 @@ public final class SimpleFly extends JavaPlugin{
             {
                 try {
                     resetFlyTime();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    fManager.saveForReset();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -92,7 +90,19 @@ public final class SimpleFly extends JavaPlugin{
             this.getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "[SimpleFly] did not find Permissions");
     }
 
+    public void setupResetTime()
+    {
+        FileConfiguration config;
+        File file = new File(this.getDataFolder(), "Fly_Info.yml");
+        if(file.exists())
+        {
+            config = YamlConfiguration.loadConfiguration(file);
+            this.resetHour = config.getInt("Reset_Time");
+        }
+    }
+
     public void setResetTime(int resetHour) throws IOException {
+        this.resetHour = resetHour;
         FileConfiguration config;
         File file = new File(this.getDataFolder(), "Fly_Info.yml");
         if(file.exists())
@@ -104,31 +114,16 @@ public final class SimpleFly extends JavaPlugin{
     }
 
     private void resetFlyTime() throws IOException {
-        FileConfiguration config;
-        File file = new File(this.getDataFolder(), "Fly_Info.yml");
-        int resetHour = 0;
-        if(file.exists())
+        getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "" + (resetHour - LocalTime.now().getHour()));
+        if(resetHour - LocalTime.now().getHour() == 0 && canReset)
         {
-            config = YamlConfiguration.loadConfiguration(file);
-            resetHour = config.getInt("Reset_Time");
+            getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
+            fManager.timerReset();
+            canReset = false;
         }
-
-        if(!canReset)
+        if(resetHour - LocalTime.now().getHour() > 0 && !canReset)
         {
-            if(resetHour < LocalTime.now().getHour())
-            {
-                canReset = true;
-            }
-        }
-
-        if(canReset)
-        {
-            if(resetHour == LocalTime.now().getHour())
-            {
-                getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
-                fManager.timerReset();
-                canReset = false;
-            }
+            canReset = true;
         }
     }
 }
