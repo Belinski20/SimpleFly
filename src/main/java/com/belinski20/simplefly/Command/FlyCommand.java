@@ -1,6 +1,7 @@
 package com.belinski20.simplefly.Command;
 
 import com.belinski20.simplefly.SimpleFly;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -28,11 +29,14 @@ public class FlyCommand implements TabExecutor
                 e.printStackTrace();
             }
             if(SimpleFly.s.fManager.hasFlyTime(player)) {
+                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] " + player.getName() + " has activated fly");
+                sender.sendMessage(ChatColor.AQUA + "SimpleFly" + ChatColor.WHITE + " : " + ChatColor.GREEN + "active");
                 player.setAllowFlight(true);
                 player.setFlying(true);
             }
             else
             {
+                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] " + player.getName() + " tried to fly but has no time remaining");
                 sender.sendMessage(ChatColor.RED + "No Fly Time Left For Today!");
                 try {
                     SimpleFly.s.fManager.stopFly(player);
@@ -43,6 +47,8 @@ public class FlyCommand implements TabExecutor
         }
         else
         {
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] " + player.getName() + " has deactivated fly");
+            sender.sendMessage(ChatColor.AQUA + "SimpleFly" + ChatColor.WHITE + " : " + ChatColor.RED + "deactived");
             player.setFlying(false);
             player.setAllowFlight(false);
             try {

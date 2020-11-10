@@ -1,6 +1,7 @@
 package com.belinski20.simplefly.Command;
 
 import com.belinski20.simplefly.SimpleFly;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,7 +42,10 @@ public class AddCommand implements TabExecutor {
         {
             SimpleFly.s.fManager.getData(player).incrementTime(timeToAdd);
             if(!sender.equals(player))
-                sender.sendMessage(ChatColor.GREEN + args[1] + " has been added to " + player.getName());
+            {
+                sender.sendMessage(ChatColor.GREEN + args[1] + " minutes has been added to " + player.getName() + "'s fly time");
+            }
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Simple Fly] " + sender.getName() + " has added " + timeToAdd + " minutes to " + player.getName() + "'s fly time");
             player.sendMessage(ChatColor.GREEN + args[1] + " minutes has been added to your fly timer");
             return true;
         }
@@ -53,7 +57,10 @@ public class AddCommand implements TabExecutor {
                 e.printStackTrace();
             }
             if(!sender.equals(player))
-                sender.sendMessage(ChatColor.GREEN + args[1] + " has been added to " + player.getName());
+            {
+                sender.sendMessage(ChatColor.GREEN + args[1] + " minutes has been added to " + player.getName() + "'s fly time");
+            }
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Simple Fly] " + sender.getName() + " has added " + timeToAdd + " minutes to " + player.getName() + "'s fly time");
             player.sendMessage(ChatColor.GREEN + args[1] + " minutes has been added to your fly timer");
             return true;
         }

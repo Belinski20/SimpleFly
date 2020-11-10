@@ -1,6 +1,7 @@
 package com.belinski20.simplefly.Command;
 
 import com.belinski20.simplefly.SimpleFly;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,7 +32,8 @@ public class ResetCommand implements TabExecutor {
         }
         try {
             SimpleFly.s.setResetTime(newResetTime);
-            sender.sendMessage(ChatColor.GREEN + "Fly Reset Time has been set to " + args[0]);
+            sender.sendMessage(ChatColor.LIGHT_PURPLE + "[Simple Fly]" + ChatColor.GREEN + " Reset time set to " + args[0]);
+            Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[Simple Fly] " + sender.getName() + " has set the reset time to " + args[0]);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

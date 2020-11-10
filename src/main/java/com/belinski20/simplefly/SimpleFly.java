@@ -120,13 +120,19 @@ public class SimpleFly extends JavaPlugin{
     private void resetFlyTime() throws IOException {
         if(resetHour - LocalTime.now().getHour() == 0 && canReset)
         {
+            alertPLayers();
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
             fManager.timerReset();
             canReset = false;
         }
-        if(resetHour - LocalTime.now().getHour() > 0 && !canReset)
+        if(resetHour - LocalTime.now().getHour() < 0 && !canReset)
         {
             canReset = true;
         }
+    }
+
+    private void alertPLayers()
+    {
+        Bukkit.broadcast(ChatColor.LIGHT_PURPLE + "[SimpleFly] Fly Time was reset", "simplefly.notify");
     }
 }

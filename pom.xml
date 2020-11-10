@@ -6,7 +6,7 @@
 
     <groupId>com.belinski20</groupId>
     <artifactId>SimpleFly</artifactId>
-    <version>1.0.1b</version>
+    <version>1.1.3b</version>
     <packaging>jar</packaging>
 
     <name>SimpleFly-${project.version}</name>

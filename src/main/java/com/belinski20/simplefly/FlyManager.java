@@ -3,6 +3,7 @@ package com.belinski20.simplefly;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -55,11 +56,13 @@ public class FlyManager
             }
             flyingPlayers.put(player, new PlayerData(time));
         }
+
         if(!flyContains(player))
             playerTasks.remove(player);
+
         int id = Bukkit.getScheduler().scheduleSyncRepeatingTask(SimpleFly.s, () -> {
             //noinspection deprecation
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("Fly available: " + toTime(flyingPlayers.get(player).getFlyTime())));
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + "Fly available: " + ChatColor.GREEN + toTime(flyingPlayers.get(player).getFlyTime())));
             if(!player.isFlying() && isFlying(player))
             {
                 pauseTime(player);
