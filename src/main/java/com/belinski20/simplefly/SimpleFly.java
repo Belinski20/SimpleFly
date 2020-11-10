@@ -14,7 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.Calendar;
 
 public class SimpleFly extends JavaPlugin{
 
@@ -97,12 +96,14 @@ public class SimpleFly extends JavaPlugin{
         if(file.exists())
         {
             config = YamlConfiguration.loadConfiguration(file);
-            this.resetHour = config.getInt("Reset_Time");
+            int resetTime = config.getInt("Reset_Time");
+            if(resetTime == 24)
+                resetTime = 0;
+            this.resetHour = resetTime;
         }
     }
 
     public void setResetTime(int resetHour) throws IOException {
-        this.resetHour = resetHour;
         FileConfiguration config;
         File file = new File(this.getDataFolder(), "Fly_Info.yml");
         if(file.exists())
@@ -111,10 +112,12 @@ public class SimpleFly extends JavaPlugin{
             config.set("Reset_Time", resetHour);
             config.save(file);
         }
+        if(resetHour == 24)
+            resetHour = 0;
+        this.resetHour = resetHour;
     }
 
     private void resetFlyTime() throws IOException {
-        getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "" + (resetHour - LocalTime.now().getHour()));
         if(resetHour - LocalTime.now().getHour() == 0 && canReset)
         {
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
