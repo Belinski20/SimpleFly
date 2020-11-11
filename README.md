@@ -13,7 +13,7 @@ Fly plugin originally created for the Spinalcraft Minecraft Server
 
 ### Commands
 ```
-/sfly : Enables or Disables flight
+/fly : Enables or Disables flight
 /aft <UserName> <time> : adds time in minutes to a player (can use negative numbers to subtract time)
 /rft <hour> : sets the daily reset time for the plugin (between 1 and 24 are valid times for hour)
 ```

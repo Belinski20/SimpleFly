@@ -29,7 +29,7 @@ public class SimpleFly extends JavaPlugin{
         getDataFolder().mkdir();
         s = this;
         fManager = new FlyManager();
-        getCommand("sfly").setExecutor(new FlyCommand());
+        getCommand("fly").setExecutor(new FlyCommand());
         getCommand("aft").setExecutor(new AddCommand());
         getCommand("rft").setExecutor(new ResetCommand());
         getServer().getPluginManager().registerEvents(new FlyEvents(), this);

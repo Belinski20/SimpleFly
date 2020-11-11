@@ -7,11 +7,11 @@ description: Simple Fly Plugin For SpinalCraft
 depend: [Vault]
 
 commands:
-  sfly:
+  fly:
     permission-message: Do not have valid permissions to use
     description: Enable/Disable Fly
     permission: simplefly.fly
-    usage: /sfly
+    usage: /fly
   aft:
     permission-message: Do not have valid permissions to use
     description: Adds fly time to a player given a number of minutes
