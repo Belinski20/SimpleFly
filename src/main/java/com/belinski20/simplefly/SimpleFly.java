@@ -120,10 +120,10 @@ public class SimpleFly extends JavaPlugin{
     private void resetFlyTime() throws IOException {
         if(resetHour - LocalTime.now().getHour() == 0 && canReset)
         {
+            canReset = false;
             alertPLayers();
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
             fManager.timerReset();
-            canReset = false;
         }
         if(resetHour - LocalTime.now().getHour() < 0 && !canReset)
         {
