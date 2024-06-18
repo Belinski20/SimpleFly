@@ -6,133 +6,66 @@ import com.belinski20.simplefly.Command.ResetCommand;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalTime;
 
-public class SimpleFly extends JavaPlugin{
-
+public class SimpleFly extends JavaPlugin {
     public static SimpleFly s;
+
     public FlyManager fManager;
+
     public Permission perms;
-    private boolean canReset = false;
-    private int resetHour = 0;
 
-
-    @Override
     public void onEnable() {
         getDataFolder().mkdir();
         s = this;
-        fManager = new FlyManager();
+        this.fManager = new FlyManager();
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("aft").setExecutor(new AddCommand());
         getCommand("rft").setExecutor(new ResetCommand());
         getServer().getPluginManager().registerEvents(new FlyEvents(), this);
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+            (new SimpleFlyPlaceholder(this.fManager)).register();
         setupPermissions();
-        setupResetTime();
         try {
             createFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run()
-            {
-                try {
-                    resetFlyTime();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 20, 20);
     }
 
-    @Override
     public void onDisable() {
         try {
-            fManager.saveForReset();
+            this.fManager.saveForReset();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void createFile() throws IOException {
-        FileConfiguration config;
-        File file = new File(this.getDataFolder(), "Fly_Info.yml");
-        if(file.createNewFile())
-        {
-            config = YamlConfiguration.loadConfiguration(file);
-            config.set("Reset_Time", 24);
-            config.save(file);
-            for(String rank : perms.getGroups())
-            {
-                config.set("Ranks." + rank, 0);
-                config.save(file);
+        File file = new File(getDataFolder(), "Fly_Info.yml");
+        if (file.createNewFile()) {
+            YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(file);
+            yamlConfiguration.set("Reset_Time", 24);
+            yamlConfiguration.save(file);
+            for (String rank : this.perms.getGroups()) {
+                yamlConfiguration.set("Ranks." + rank, 0);
+                yamlConfiguration.save(file);
             }
         }
     }
 
-    private void setupPermissions()
-    {
-        RegisteredServiceProvider<Permission> rsp = this.getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        if(perms != null)
-            this.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[SimpleFly] found Permissions");
-        else
-            this.getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "[SimpleFly] did not find Permissions");
-    }
-
-    public void setupResetTime()
-    {
-        FileConfiguration config;
-        File file = new File(this.getDataFolder(), "Fly_Info.yml");
-        if(file.exists())
-        {
-            config = YamlConfiguration.loadConfiguration(file);
-            int resetTime = config.getInt("Reset_Time");
-            if(resetTime == 24)
-                resetTime = 0;
-            this.resetHour = resetTime;
+    private void setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        this.perms = rsp.getProvider();
+        if (this.perms != null) {
+            getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "[SimpleFly] found Permissions");
+        } else {
+            getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "[SimpleFly] did not find Permissions");
         }
-    }
-
-    public void setResetTime(int resetHour) throws IOException {
-        FileConfiguration config;
-        File file = new File(this.getDataFolder(), "Fly_Info.yml");
-        if(file.exists())
-        {
-            config = YamlConfiguration.loadConfiguration(file);
-            config.set("Reset_Time", resetHour);
-            config.save(file);
-        }
-        if(resetHour == 24)
-            resetHour = 0;
-        this.resetHour = resetHour;
-    }
-
-    private void resetFlyTime() throws IOException {
-        if(resetHour - LocalTime.now().getHour() == 0 && canReset)
-        {
-            canReset = false;
-            alertPLayers();
-            getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "[SimpleFly] Flying Time Was Reset");
-            fManager.timerReset();
-        }
-        if(resetHour - LocalTime.now().getHour() < 0 && !canReset)
-        {
-            canReset = true;
-        }
-    }
-
-    private void alertPLayers()
-    {
-        Bukkit.broadcast(ChatColor.LIGHT_PURPLE + "[SimpleFly] Fly Time was reset", "simplefly.notify");
     }
 }
